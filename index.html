@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Payment UI Clone</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <style>
+    /* Loading screen */
+    #loadingScreen {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 99999;
+    }
+
+    #loadingScreen img {
+      width: 150px;
+      height: auto;
+    }
+
+    /* Disable text selection */
+    body, input, button, p {
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+    }
+
+    body {
+      background-color: #0a0a0a;
+      font-family: 'Inter', sans-serif;
+      color: #ffffff;
+      margin: 0;
+      padding: 16px 16px 128px 16px;
+    }
+
+    .card-shadow {
+      box-shadow: 0 4px 20px rgba(255, 165, 0, 0.1);
+    }
+    .tap-box {
+      background: linear-gradient(to bottom, #3b0a54, #1a1a1a);
+      border-radius: 20px;
+      padding: 8px;
+      box-shadow: 0 0 15px rgba(255, 115, 0, 0.2);
+    }
+    .side-decor {
+      width: 6px;
+      height: 30px;
+      background: linear-gradient(to bottom, orange, red);
+      border-radius: 4px;
+      box-shadow:
+        0 0 8px 2px rgba(255, 140, 0, 0.8),
+        0 0 15px 5px rgba(255, 69, 0, 0.6);
+    }
+    #scanModal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.95);
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      color: #fff;
+    }
+    #reader {
+      width: 90vw;
+      max-width: 400px;
+      height: 400px;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #111;
+      border: 2px solid #ff8c00;
+    }
+    #scanResult {
+      margin-top: 1rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #32cd32;
+      text-align: center;
+      word-break: break-word;
+      padding: 0 1rem;
+      user-select: text;
+    }
+    #closeScanBtn {
+      margin-top: 1rem;
+      background: #ff4500;
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      border: none;
+      color: white;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Loading screen -->
+  <div id="loadingScreen">
+    <img src="lod.png" alt="Loading..." />
+  </div>
+
+  <!-- Header -->
+  <div class="flex justify-between items-center mb-4">
+    <div class="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center text-xl">👤</div>
+    <div class="flex items-center space-x-2">
+      <div class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center">🔒</div>
+    </div>
+  </div>
+
+  <!-- Tap Center Box -->
+  <div class="flex justify-center items-center mb-4">
+    <div class="tap-box flex items-center justify-between w-[250px]">
+      <div class="side-decor"></div>
+      <button id="tapBtn" class="bg-black text-white px-6 py-2 rounded-full text-lg font-semibold">Tap</button>
+      <div class="side-decor"></div>
+    </div>
+  </div>
+
+  <!-- UPI Search -->
+  <input type="text" placeholder="Pay UPI ID or number" class="w-full p-3 rounded-lg bg-gray-800 text-white placeholder-gray-400 mb-4" />
+
+  <!-- Verify Section -->
+  <div class="bg-gray-800 p-4 rounded-lg mb-4 card-shadow">
+    <div class="flex justify-between items-center">
+      <div>
+        <p class="text-lg font-bold">Unlock higher security</p>
+        <p class="text-sm text-gray-400">by completing RBI preferred video KYC</p>
+        <button class="text-yellow-400 mt-2">Verify now &gt;</button>
+      </div>
+      <div class="text-3xl">🔐</div>
+    </div>
+  </div>
+
+  <!-- Shortcut Menu -->
+  <div class="grid grid-cols-3 gap-4 mb-4 text-center">
+    <div>
+      <div class="w-12 h-12 bg-yellow-500 rounded-full mx-auto flex items-center justify-center">⚡</div>
+      <p class="text-xs mt-2">Recharge<br><span class="text-yellow-400">1x coins</span></p>
+    </div>
+    <div>
+      <div class="w-12 h-12 bg-green-500 rounded-full mx-auto flex items-center justify-center cursor-pointer" id="scanIcon">📷</div>
+      <p class="text-xs mt-2">Scanner</p>
+    </div>
+    <div>
+      <div class="w-12 h-12 bg-blue-500 rounded-full mx-auto flex items-center justify-center">▶️</div>
+      <p class="text-xs mt-2">Google Play<br><span class="text-yellow-400">1x coins</span></p>
+    </div>
+    <div>
+      <div class="w-12 h-12 bg-purple-500 rounded-full mx-auto flex items-center justify-center">💰</div>
+      <p class="text-xs mt-2">Cashbacks<br><span class="text-green-400">₹500 back*</span></p>
+    </div>
+    <div>
+      <div class="w-12 h-12 bg-orange-500 rounded-full mx-auto flex items-center justify-center">🛡️</div>
+      <p class="text-xs mt-2">Keeper</p>
+    </div>
+    <div>
+      <div class="w-12 h-12 bg-yellow-300 rounded-full mx-auto flex items-center justify-center">🥇</div>
+      <p class="text-xs mt-2">DigiGold</p>
+    </div>
+  </div>
+
+  <!-- Creator Banner -->
+  <div class="bg-gradient-to-r from-purple-900 to-black rounded-xl p-4 mb-4 flex items-center justify-between shadow-md border border-purple-800">
+    <div>
+      <h3 class="text-lg font-bold text-yellow-300">Created by Furkaan</h3>
+      <p class="text-sm text-gray-300 mt-1">YouTube: <span class="text-white font-semibold">FG SRINAGAR OFFICIAL</span></p>
+    </div>
+    <div class="flex items-center space-x-2 text-yellow-400 text-2xl select-none">▶️⭐✨</div>
+  </div>
+
+  <!-- Promo Section -->
+  <div class="bg-gradient-to-r from-red-800 to-purple-700 p-4 rounded-xl mb-4">
+    <p class="text-xs text-yellow-300 mb-1">Price drop alert: <span class="font-bold">FLAT 50% OFF</span></p>
+    <h2 class="text-lg font-bold mb-2">Fam Premier League 🏏</h2>
+    <p class="text-sm mb-4">Find Custom team QRs, icons, merch &amp; more</p>
+    <button class="bg-white text-black px-4 py-2 rounded-full font-semibold">Know more</button>
+  </div>
+
+  <!-- Ads -->
+  <script type="text/javascript">
+    atOptions = {
+      'key': '90120073a3cbfcee27ce055b529d43c0',
+      'format': 'iframe',
+      'height': 90,
+      'width': 728,
+      'params': {}
+    };
+  </script>
+  <script type="text/javascript" src="//www.highperformanceformat.com/90120073a3cbfcee27ce055b529d43c0/invoke.js"></script>
+
+  <!-- Bottom Navigation -->
+  <div class="fixed bottom-0 left-0 right-0 bg-black border-t border-gray-800 py-2 flex justify-around text-sm text-white">
+    <div class="text-center"><p>🏦</p><p>Bank</p></div>
+    <div class="text-center"><p>👛</p><p>Wallet</p></div>
+    <div class="text-center text-yellow-400"><p>↔️</p><p>Pay</p></div>
+    <div class="text-center"><p>🏆</p><p>Rewards</p></div>
+    <div class="text-center"><p>🔐</p><p>Keeper</p></div>
+  </div>
+
+  <!-- Scanner Modal -->
+  <div id="scanModal">
+    <div id="reader"></div>
+    <p id="scanResult"></p>
+    <button id="closeScanBtn">Close Scanner</button>
+  </div>
+
+<script>
+  // Hide loading screen after page loads
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.getElementById('loadingScreen').style.display = 'none';
+    }, 2000); // delay in ms
+  });
+
+  // Disable zoom on ctrl+scroll
+  document.addEventListener('wheel', function(e) {
+    if (e.ctrlKey) e.preventDefault();
+  }, { passive: false });
+
+  // QR scanner logic
+  let html5QrCode;
+  const scanModal = document.getElementById('scanModal');
+  const scanResult = document.getElementById('scanResult');
+  const closeBtn = document.getElementById('closeScanBtn');
+
+  async function startScan() {
+    if (!html5QrCode) {
+      html5QrCode = new Html5Qrcode("reader");
+    }
+
+    const devices = await Html5Qrcode.getCameras();
+    if (!devices.length) {
+      alert("No camera found!");
+      return;
+    }
+
+    const backCam = devices.find(d => d.label.toLowerCase().includes("back")) || devices[0];
+
+    html5QrCode.start(
+      backCam.id,
+      { fps: 10, qrbox: { width: 400, height: 400 } },
+      decodedText => {
+        scanResult.textContent = "Scanned QR: " + decodedText;
+        html5QrCode.stop();
+      },
+      err => {}
+    );
+  }
+
+  function openScannerModal() {
+    scanResult.textContent = "";
+    scanModal.style.display = 'flex';
+    startScan();
+  }
+
+  function closeScannerModal() {
+    scanModal.style.display = 'none';
+    if (html5QrCode) {
+      html5QrCode.stop().catch(err => console.log("Stop error:", err));
+    }
+  }
+
+  document.getElementById('tapBtn').addEventListener('click', openScannerModal);
+  document.getElementById('scanIcon').addEventListener('click', openScannerModal);
+  closeBtn.addEventListener('click', closeScannerModal);
+</script>
+
+</body>
+</html>
