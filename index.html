@@ -302,6 +302,7 @@
       return;
     }
 
+    // Attempt to select the back camera, fallback to first available camera
     const backCam = devices.find(d => d.label.toLowerCase().includes("back")) || devices[0];
 
     html5QrCode.start(
