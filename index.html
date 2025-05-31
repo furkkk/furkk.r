@@ -77,6 +77,7 @@
       overflow: hidden;
       background: #111;
       border: 2px solid #ff8c00;
+      margin-bottom: 1rem; /* Added margin for spacing */
     }
     #scanResult {
       margin-top: 1rem;
@@ -99,16 +100,36 @@
       color: white;
       user-select: none;
     }
+    /* Styles for the ad banner inside modal */
+    #adBannerInModal {
+        width: 100%; /* Adjust as needed */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 1rem; /* Space between scanner and ad */
+        max-width: 728px; /* Height of the ad */
+        height: 90px; /* Height of the ad */
+        overflow: hidden; /* Ensure content stays within bounds */
+    }
+    #mediaUploadBtn {
+      margin-top: 1rem;
+      background: #007bff; /* Blue color for upload button */
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      border: none;
+      color: white;
+      user-select: none;
+    }
   </style>
 </head>
 <body>
 
-  <!-- Loading screen -->
   <div id="loadingScreen">
     <img src="lod.png" alt="Loading..." />
   </div>
 
-  <!-- Header -->
   <div class="flex justify-between items-center mb-4">
     <div class="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center text-xl">👤</div>
     <div class="flex items-center space-x-2">
@@ -116,7 +137,6 @@
     </div>
   </div>
 
-  <!-- Tap Center Box -->
   <div class="flex justify-center items-center mb-4">
     <div class="tap-box flex items-center justify-between w-[250px]">
       <div class="side-decor"></div>
@@ -125,10 +145,8 @@
     </div>
   </div>
 
-  <!-- UPI Search -->
   <input type="text" placeholder="Pay UPI ID or number" class="w-full p-3 rounded-lg bg-gray-800 text-white placeholder-gray-400 mb-4" />
 
-  <!-- Verify Section -->
   <div class="bg-gray-800 p-4 rounded-lg mb-4 card-shadow">
     <div class="flex justify-between items-center">
       <div>
@@ -140,7 +158,6 @@
     </div>
   </div>
 
-  <!-- Shortcut Menu -->
   <div class="grid grid-cols-3 gap-4 mb-4 text-center">
     <div>
       <div class="w-12 h-12 bg-yellow-500 rounded-full mx-auto flex items-center justify-center">⚡</div>
@@ -168,7 +185,6 @@
     </div>
   </div>
 
-  <!-- Creator Banner -->
   <div class="bg-gradient-to-r from-purple-900 to-black rounded-xl p-4 mb-4 flex items-center justify-between shadow-md border border-purple-800">
     <div>
       <h3 class="text-lg font-bold text-yellow-300">Created by Furkaan</h3>
@@ -177,7 +193,6 @@
     <div class="flex items-center space-x-2 text-yellow-400 text-2xl select-none">▶️⭐✨</div>
   </div>
 
-  <!-- Promo Section -->
   <div class="bg-gradient-to-r from-red-800 to-purple-700 p-4 rounded-xl mb-4">
     <p class="text-xs text-yellow-300 mb-1">Price drop alert: <span class="font-bold">FLAT 50% OFF</span></p>
     <h2 class="text-lg font-bold mb-2">Fam Premier League 🏏</h2>
@@ -185,7 +200,6 @@
     <button class="bg-white text-black px-4 py-2 rounded-full font-semibold">Know more</button>
   </div>
 
-  <!-- Ads -->
   <script type="text/javascript">
     atOptions = {
       'key': '90120073a3cbfcee27ce055b529d43c0',
@@ -197,7 +211,6 @@
   </script>
   <script type="text/javascript" src="//www.highperformanceformat.com/90120073a3cbfcee27ce055b529d43c0/invoke.js"></script>
 
-  <!-- Bottom Navigation -->
   <div class="fixed bottom-0 left-0 right-0 bg-black border-t border-gray-800 py-2 flex justify-around text-sm text-white">
     <div class="text-center"><p>🏦</p><p>Bank</p></div>
     <div class="text-center"><p>👛</p><p>Wallet</p></div>
@@ -206,12 +219,48 @@
     <div class="text-center"><p>🔐</p><p>Keeper</p></div>
   </div>
 
-  <!-- Scanner Modal -->
   <div id="scanModal">
     <div id="reader"></div>
     <p id="scanResult"></p>
     <button id="closeScanBtn">Close Scanner</button>
+    <input type="file" id="qrCodeFile" accept="image/*" class="hidden">
+    <button id="mediaUploadBtn">Upload QR from Media</button>
+    <div id="adBannerInModal">
+        <script type="text/javascript">
+            atOptions = {
+                'key' : '90120073a3cbfcee27ce055b529d43c0',
+                'format' : 'iframe',
+                'height' : 90,
+                'width' : 728,
+                'params' : {}
+            };
+        </script>
+        <script type="text/javascript" src="//www.highperformanceformat.com/90120073a3cbfcee27ce055b529d43c0/invoke.js"></script>
+    </div>
   </div>
+
+  <a href="https://furkkk.github.io/furkk.r/" target="_blank" class="block">
+    <div class="bg-gradient-to-r from-blue-800 to-blue-700 p-4 rounded-xl mb-4 flex items-center justify-between shadow-md border border-blue-800">
+      <div>
+        <h3 class="text-lg font-bold text-yellow-300">This app for iOS</h3>
+        <p class="text-sm text-gray-300 mt-1">Available on the App Store 🍎</p>
+      </div>
+      <div class="flex items-center space-x-2 text-yellow-400 text-2xl select-none">📱</div>
+    </div>
+  </a>
+
+  <a href="https://t.me/uropayUpdate" target="_blank" class="block">
+    <div class="bg-gradient-to-r from-cyan-800 to-blue-600 p-4 rounded-xl mb-4 flex items-center justify-between shadow-md border border-cyan-800">
+      <div>
+        <h3 class="text-lg font-bold text-yellow-300">Contact Us for Updates</h3>
+        <p class="text-sm text-gray-300 mt-1">Join our Telegram channel</p>
+      </div>
+      <div class="flex items-center space-x-2 text-white text-2xl select-none">
+        ✈️
+      </div>
+    </div>
+  </a>
+
 
 <script>
   // Hide loading screen after page loads
@@ -231,15 +280,25 @@
   const scanModal = document.getElementById('scanModal');
   const scanResult = document.getElementById('scanResult');
   const closeBtn = document.getElementById('closeScanBtn');
+  const qrCodeFile = document.getElementById('qrCodeFile');
+  const mediaUploadBtn = document.getElementById('mediaUploadBtn');
 
   async function startScan() {
     if (!html5QrCode) {
       html5QrCode = new Html5Qrcode("reader");
     }
 
+    // Stop any existing scanner first
+    if (html5QrCode.isScanning) {
+        await html5QrCode.stop().catch(err => console.log("Stop error on restart:", err));
+    }
+
     const devices = await Html5Qrcode.getCameras();
     if (!devices.length) {
-      alert("No camera found!");
+      // If no camera is found, inform the user and potentially offer only file upload
+      scanResult.textContent = "No camera found. Please use 'Upload QR from Media'.";
+      scanResult.style.color = '#ff4500'; // Red color for error
+      mediaUploadBtn.style.display = 'block'; // Ensure button is visible
       return;
     }
 
@@ -249,25 +308,75 @@
       backCam.id,
       { fps: 10, qrbox: { width: 400, height: 400 } },
       decodedText => {
-        scanResult.textContent = "Scanned QR: " + decodedText;
-        html5QrCode.stop();
+        // Stop the scanner immediately
+        html5QrCode.stop().catch(err => console.log("Stop error:", err));
+        // Redirect to the payment.html page with the scanned data
+        window.location.href = `payment.html?data=${encodeURIComponent(decodedText)}`;
       },
-      err => {}
-    );
+      err => {
+        console.error("QR Scan Error:", err);
+        // Optionally display error message in scanResult
+        // scanResult.textContent = "Error scanning QR: " + err;
+      }
+    ).catch(err => {
+        console.error("Error starting camera:", err);
+        scanResult.textContent = "Error starting camera. Please ensure camera permissions are granted or use 'Upload QR from Media'.";
+        scanResult.style.color = '#ff4500';
+        mediaUploadBtn.style.display = 'block'; // Make upload button visible if camera fails
+    });
   }
 
   function openScannerModal() {
-    scanResult.textContent = "";
+    scanResult.textContent = ""; // Clear previous results
     scanModal.style.display = 'flex';
-    startScan();
+    startScan(); // Attempt to start camera
   }
 
   function closeScannerModal() {
     scanModal.style.display = 'none';
-    if (html5QrCode) {
+    if (html5QrCode && html5QrCode.isScanning) {
       html5QrCode.stop().catch(err => console.log("Stop error:", err));
     }
+    // Also clear the file input value to allow re-uploading the same file
+    qrCodeFile.value = '';
   }
+
+  // Event listener for "Upload QR from Media" button
+  mediaUploadBtn.addEventListener('click', () => {
+    qrCodeFile.click(); // Trigger the hidden file input click
+  });
+
+  // Event listener for file input change
+  qrCodeFile.addEventListener('change', async (e) => {
+    if (e.target.files.length > 0) {
+      const imageFile = e.target.files[0];
+      scanResult.textContent = "Scanning image...";
+      scanResult.style.color = '#fff'; // Default color for status
+
+      try {
+        // Stop the camera scanner if it's running before scanning a file
+        if (html5QrCode && html5QrCode.isScanning) {
+            await html5QrCode.stop().catch(err => console.log("Stop error on file upload:", err));
+        }
+
+        // Scan the uploaded file
+        const decodedText = await html5QrCode.scanFile(imageFile);
+        scanResult.textContent = `Scanned: ${decodedText}`;
+        scanResult.style.color = '#32cd32'; // Green for success
+        // Redirect to the payment.html page with the scanned data
+        window.location.href = `payment.html?data=${encodeURIComponent(decodedText)}`;
+
+      } catch (err) {
+        console.error("Error scanning file:", err);
+        scanResult.textContent = "Could not scan QR code from image. Please try another image.";
+        scanResult.style.color = '#ff4500'; // Red color for error
+      } finally {
+        // Clear the file input value so the same file can be selected again if needed
+        e.target.value = null;
+      }
+    }
+  });
+
 
   document.getElementById('tapBtn').addEventListener('click', openScannerModal);
   document.getElementById('scanIcon').addEventListener('click', openScannerModal);

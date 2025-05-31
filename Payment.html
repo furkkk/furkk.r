@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Payment Details</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-color: #0a0a0a;
+      font-family: 'Inter', sans-serif;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
+      overflow: hidden; /* Prevent scroll during animation */
+      /* Disable text selection */
+      -webkit-user-select: none; /* Safari */
+      -moz-user-select: none; /* Firefox */
+      -ms-user-select: none; /* Internet Explorer/Edge */
+      user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+      /* Disable touch-callout (iOS long press) */
+      -webkit-touch-callout: none;
+    }
+    .container {
+      background-color: #1a1a1a;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(255, 165, 0, 0.1);
+      text-align: center;
+      max-width: 500px;
+      width: 100%;
+      position: relative; /* For animation overlay */
+    }
+    .input-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    .input-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 1.1rem;
+      color: #ccc;
+    }
+    .input-group input[type="text"],
+    .input-group input[type="number"] {
+      width: calc(100% - 20px);
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #333;
+      background-color: #222;
+      color: #fff;
+      font-size: 1.2rem;
+      text-align: left;
+      /* Allow text selection specifically for inputs */
+      -webkit-user-select: text;
+      -moz-user-select: text;
+      -ms-user-select: text;
+      user-select: text;
+    }
+    .btn {
+      background-color: #ff8c00;
+      color: white;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+    .btn:hover {
+      background-color: #e07b00;
+    }
+    .upi-details {
+      margin-top: 15px;
+      background-color: #2a2a2a;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: left;
+      font-size: 0.95rem;
+      color: #e0e0e0;
+    }
+    .upi-details p {
+      margin-bottom: 5px;
+    }
+    .upi-details strong {
+      color: #ffcc00;
+    }
+
+    /* Ad-specific blurring */
+    .ad-placement.blur-ad {
+      filter: blur(5px); /* Apply blur directly to ads */
+      transition: filter 0.5s ease-in-out;
+      pointer-events: none; /* Disable interaction with blurred ads */
+    }
+
+    /* Animation overlay styles */
+    .payment-success-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(10, 10, 10, 0.9);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+    }
+    .payment-success-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    .success-icon {
+      width: 100px;
+      height: 100px;
+      background-color: #28a745; /* Green checkmark background */
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      animation: pop-in 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+    }
+    .success-icon svg {
+      fill: white;
+      width: 60px;
+      height: 60px;
+    }
+    .success-message {
+      margin-top: 20px;
+      font-size: 2rem;
+      font-weight: bold;
+      color: #28a745; /* Green text */
+      opacity: 0;
+      animation: fade-in 1s forwards 0.3s;
+    }
+    .payment-details-summary {
+      margin-top: 15px;
+      font-size: 1.2rem;
+      color: #e0e0e0;
+      opacity: 0;
+      animation: fade-in 1s forwards 0.6s;
+    }
+    .datetime-summary {
+      font-size: 1rem;
+      color: #a0a0a0;
+      margin-top: 5px;
+      opacity: 0;
+      animation: fade-in 1s forwards 0.9s; /* Slightly delayed fade-in */
+    }
+
+    .ad-placement {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        text-align: center; /* Center the ad content if it's smaller than the div */
+    }
+
+    @keyframes pop-in {
+      0% { transform: scale(0); opacity: 0; }
+      80% { transform: scale(1.1); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    @keyframes fade-in {
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ad-placement">
+    <script type="text/javascript">
+      atOptions = {
+        'key' : '90120073a3cbfcee27ce055b529d43c0',
+        'format' : 'iframe',
+        'height' : 90,
+        'width' : 728,
+        'params' : {}
+      };
+    </script>
+    <script type="text/javascript" src="//www.highperformanceformat.com/90120073a3cbfcee27ce055b529d43c0/invoke.js"></script>
+  </div>
+
+  <div class="container">
+    <h1 class="text-3xl font-bold mb-6 text-yellow-400">Payment Details</h1>
+
+    <div class="input-group">
+      <label for="scannedRawData">Raw Scanned Data:</label>
+      <input type="text" id="scannedRawData" readonly class="text-gray-300"/>
+    </div>
+
+    <div id="upiParsedDetails" class="upi-details hidden">
+      <p><strong>Payee UPI ID:</strong> <span id="payeeUpiId"></span></p>
+      <p><strong>Payee Name:</strong> <span id="payeeName"></span></p>
+      <p><strong>Pre-filled Amount:</strong> <span id="prefilledAmount"></span></p>
+      <p class="text-xs text-gray-400 mt-2">UPI QR code parsed successfully!</p>
+    </div>
+
+    <div class="input-group mt-6">
+      <label for="amountInput">Enter Amount (₹):</label>
+      <input type="number" id="amountInput" placeholder="0.00" class="focus:outline-none focus:ring-2 focus:ring-yellow-500" step="0.01" min="0" />
+    </div>
+
+    <button class="btn" id="proceedToPayBtn">Proceed to Pay</button>
+
+    <p class="mt-4 text-sm text-gray-500" id="scanMessage"></p>
+  </div>
+
+  <div id="paymentSuccessOverlay" class="payment-success-overlay">
+    <div class="success-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+      </svg>
+    </div>
+    <div class="success-message">Payment Successful!</div>
+    <div class="payment-details-summary">
+      <p>You paid <strong id="paidAmountSummary"></strong> to <strong id="paidNameSummary"></strong></p>
+      <p class="datetime-summary"><span id="paymentDate"></span> at <span id="paymentTime"></span></p>
+    </div>
+  </div>
+
+  <div class="ad-placement">
+    <script type="text/javascript">
+      atOptions = {
+        'key' : '90120073a3cbfcee27ce055b529d43c0',
+        'format' : 'iframe',
+        'height' : 90,
+        'width' : 728,
+        'params' : {}
+      };
+    </script>
+    <script type="text/javascript" src="//www.highperformanceformat.com/90120073a3cbfcee27ce055b529d43c0/invoke.js"></script>
+  </div>
+
+  <audio id="successAudio" src="done.mp3" preload="auto"></audio>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const scannedData = urlParams.get('data');
+
+      const scannedRawDataElement = document.getElementById('scannedRawData');
+      const upiParsedDetailsDiv = document.getElementById('upiParsedDetails');
+      const payeeUpiIdElement = document.getElementById('payeeUpiId');
+      const payeeNameElement = document.getElementById('payeeName');
+      const prefilledAmountElement = document.getElementById('prefilledAmount');
+      const amountInputElement = document.getElementById('amountInput');
+      const scanMessageElement = document.getElementById('scanMessage');
+      const proceedToPayBtn = document.getElementById('proceedToPayBtn');
+      const paymentSuccessOverlay = document.getElementById('paymentSuccessOverlay');
+      const paidAmountSummary = document.getElementById('paidAmountSummary');
+      const paidNameSummary = document.getElementById('paidNameSummary');
+      const paymentDateElement = document.getElementById('paymentDate'); // New element
+      const paymentTimeElement = document.getElementById('paymentTime'); // New element
+      const successAudio = document.getElementById('successAudio');
+      const adPlacements = document.querySelectorAll('.ad-placement'); // Get all ad placement divs
+
+      let currentPayeeName = "N/A";
+      let currentPayeeId = "N/A";
+
+      if (scannedData) {
+        const decodedData = decodeURIComponent(scannedData);
+        scannedRawDataElement.value = decodedData;
+        scanMessageElement.textContent = "The QR code contained the following information.";
+
+        try {
+          const url = new URL(decodedData);
+          if (url.protocol === 'upi:' || url.protocol === 'pay:') {
+            const params = new URLSearchParams(url.search);
+            const pa = params.get('pa'); // Payee Address (UPI ID)
+            const pn = params.get('pn'); // Payee Name
+            const am = params.get('am'); // Amount
+
+            if (pa) {
+              payeeUpiIdElement.textContent = pa;
+              currentPayeeId = pa;
+            } else {
+              payeeUpiIdElement.textContent = "N/A";
+            }
+            if (pn) {
+              payeeNameElement.textContent = pn;
+              currentPayeeName = pn;
+            } else {
+              payeeNameElement.textContent = "N/A";
+            }
+            if (pa || pn) { // Show UPI details section if either UPI ID or Name is present
+                upiParsedDetailsDiv.classList.remove('hidden');
+            }
+            if (am && parseFloat(am) > 0) {
+              prefilledAmountElement.textContent = `₹${parseFloat(am).toFixed(2)}`;
+              amountInputElement.value = parseFloat(am).toFixed(2); // Pre-fill amount input
+            } else {
+              prefilledAmountElement.textContent = "N/A";
+            }
+          } else {
+            scanMessageElement.textContent += " This is not a standard UPI deep link.";
+          }
+        } catch (e) {
+          scanMessageElement.textContent += " Attempted to parse as UPI, but failed. It might be raw text or another format.";
+        }
+      } else {
+        scannedRawDataElement.value = "No data scanned.";
+        scanMessageElement.textContent = "No QR code data was received.";
+      }
+
+      proceedToPayBtn.addEventListener('click', () => {
+        const amount = parseFloat(amountInputElement.value);
+        if (isNaN(amount) || amount <= 0) {
+          alert("Please enter a valid amount to proceed.");
+          return;
+        }
+
+        console.log(`Attempting to pay ₹${amount.toFixed(2)} to ${currentPayeeName} (${currentPayeeId})`);
+
+        // Apply blur to all ad placement divs
+        adPlacements.forEach(adDiv => {
+          adDiv.classList.add('blur-ad');
+        });
+
+        setTimeout(() => {
+          paidAmountSummary.textContent = `₹${amount.toFixed(2)}`;
+          paidNameSummary.textContent = currentPayeeName !== "N/A" ? currentPayeeName : currentPayeeId;
+
+          // Get current date and time
+          const now = new Date();
+          const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+          const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+
+          paymentDateElement.textContent = now.toLocaleDateString('en-US', dateOptions);
+          paymentTimeElement.textContent = now.toLocaleTimeString('en-US', timeOptions);
+
+
+          paymentSuccessOverlay.classList.add('show');
+          successAudio.play().catch(e => console.error("Error playing audio:", e));
+
+        }, 1500);
+      });
+    });
+  </script>
+</body>
+</html>
